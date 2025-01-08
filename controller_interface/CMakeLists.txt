@@ -23,9 +23,11 @@ target_include_directories(
 )
 ament_target_dependencies(
   ${PROJECT_NAME}
-  hardware_interface
   rclcpp_lifecycle
 )
+# Avoid linking the mock components to avoid tests in projects using Clang getting a clobbered namespace when
+# Loading the mock components plugin
+target_link_libraries(${PROJECT_NAME} hardware_interface::hardware_interface)
 # Causes the visibility macros to use dllexport rather than dllimport,
 # which is appropriate when building the dll but not consuming it.
 target_compile_definitions(${PROJECT_NAME} PRIVATE "CONTROLLER_INTERFACE_BUILDING_DLL")

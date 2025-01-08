@@ -34,7 +34,8 @@ add_library(
 target_include_directories(
   ${PROJECT_NAME}
   PUBLIC
-  include
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>
 )
 ament_target_dependencies(${PROJECT_NAME} ${THIS_PACKAGE_INCLUDE_DEPENDS})
 # Causes the visibility macros to use dllexport rather than dllimport,
@@ -171,5 +172,17 @@ ament_export_libraries(
   ${PROJECT_NAME}
 )
 ament_export_dependencies(${THIS_PACKAGE_INCLUDE_DEPENDS})
+
+install(
+  TARGETS ${PROJECT_NAME}
+  EXPORT ${PROJECT_NAME}_export
+  RUNTIME DESTINATION bin
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  INCLUDES DESTINATION include
+)
+
+ament_export_targets(${PROJECT_NAME}_export HAS_LIBRARY_TARGET)
+
 ament_package()
 ament_generate_version_header(${PROJECT_NAME})
